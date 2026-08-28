@@ -1,0 +1,969 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+<title>Ah K'in</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Work+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+
+  :root{
+    --obsidian: #17130f;
+    --limestone: #efe7d6;
+    --limestone-dim: #ddd2b8;
+    --paper: #faf5e9;
+    --cacao: #6b5842;
+    --cacao-dim: #8a7659;
+    --mayablue: #1c8f96;
+    --mayablue-strong: #12676c;
+    --jade: #3c7a5e;
+    --jade-strong: #2b5c46;
+    --cinnabar: #b5442e;
+    --cinnabar-strong: #8f3320;
+    --surface: var(--paper);
+    --surface-raised: #ffffff;
+    --ink: #241d14;
+    --ink-dim: #5c5140;
+    --line: #d9cba8;
+    --accent: var(--mayablue);
+    --accent-strong: var(--mayablue-strong);
+    --wheel-ring: #f1e8d3;
+    --shadow: 0 1px 2px rgba(36,29,20,0.06), 0 8px 24px rgba(36,29,20,0.08);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --surface: var(--obsidian);
+      --surface-raised: #201b14;
+      --ink: var(--limestone);
+      --ink-dim: #b9ac8e;
+      --line: #3a3122;
+      --accent: #38c4cc;
+      --accent-strong: #6fdadf;
+      --jade: #57a582;
+      --jade-strong: #7bc4a1;
+      --cinnabar: #e2694c;
+      --cinnabar-strong: #ef8a70;
+      --wheel-ring: #241e15;
+      --shadow: 0 1px 2px rgba(0,0,0,0.4), 0 12px 32px rgba(0,0,0,0.45);
+    }
+  }
+  :root[data-theme="dark"]{
+    --surface: var(--obsidian);
+    --surface-raised: #201b14;
+    --ink: var(--limestone);
+    --ink-dim: #b9ac8e;
+    --line: #3a3122;
+    --accent: #38c4cc;
+    --accent-strong: #6fdadf;
+    --jade: #57a582;
+    --jade-strong: #7bc4a1;
+    --cinnabar: #e2694c;
+    --cinnabar-strong: #ef8a70;
+    --wheel-ring: #241e15;
+    --shadow: 0 1px 2px rgba(0,0,0,0.4), 0 12px 32px rgba(0,0,0,0.45);
+  }
+
+  *{ box-sizing:border-box; }
+  html,body{ margin:0; padding:0; }
+  body{
+    background: var(--surface);
+    color: var(--ink);
+    font-family: 'Work Sans', ui-sans-serif, system-ui, sans-serif;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+  ::selection{ background: var(--accent); color: var(--surface); }
+
+  h1,h2,h3,.display{
+    font-family: 'Fraunces', Georgia, serif;
+    text-wrap: balance;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+  }
+  .mono, .num{
+    font-family: 'IBM Plex Mono', ui-monospace, monospace;
+    font-variant-numeric: tabular-nums;
+  }
+  a{ color: var(--accent-strong); }
+
+  .wrap{ max-width: 1120px; margin: 0 auto; padding: 0 24px; }
+
+  /* ---------- Hero ---------- */
+  header.hero{
+    padding: 64px 0 40px;
+    border-bottom: 1px solid var(--line);
+  }
+  .eyebrow{
+    display:inline-flex; align-items:center; gap:8px;
+    font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--accent-strong); font-weight: 600;
+    margin-bottom: 18px;
+  }
+  .eyebrow::before{
+    content:""; width:7px; height:7px; border-radius:50%;
+    background: var(--accent); display:inline-block;
+  }
+  h1.title{ font-size: clamp(2.4rem, 5vw, 3.6rem); margin: 0 0 14px; line-height: 1.05; }
+  p.lede{ font-size: 1.1rem; color: var(--ink-dim); max-width: 62ch; margin: 0; }
+
+  .today-strip{
+    margin-top: 34px; display:flex; flex-wrap:wrap; gap: 14px 28px;
+    padding: 18px 22px; background: var(--surface-raised); border: 1px solid var(--line);
+    border-radius: 14px; box-shadow: var(--shadow);
+  }
+  .today-strip .item{ display:flex; flex-direction:column; gap:2px; }
+  .today-strip .k{ font-size:0.68rem; text-transform:uppercase; letter-spacing:0.09em; color: var(--ink-dim); }
+  .today-strip .v{ font-size:1.05rem; font-weight:600; }
+  .today-strip .v.accent{ color: var(--accent-strong); }
+
+  /* ---------- Sections ---------- */
+  section{ padding: 56px 0; border-bottom: 1px solid var(--line); }
+  section:last-of-type{ border-bottom:none; }
+  h2.section-title{ font-size: clamp(1.5rem, 3vw, 2rem); margin: 0 0 8px; }
+  p.section-sub{ color: var(--ink-dim); max-width: 68ch; margin: 0 0 32px; font-size: 1rem; }
+
+  /* ---------- Explorer ---------- */
+  .explorer{
+    display:grid; grid-template-columns: 300px 1fr; gap: 36px;
+  }
+  @media (max-width: 860px){ .explorer{ grid-template-columns: 1fr; } }
+
+  .control-card{
+    background: var(--surface-raised); border: 1px solid var(--line); border-radius: 16px;
+    padding: 22px; box-shadow: var(--shadow); align-self:start; position:sticky; top:20px;
+  }
+  @media (max-width: 860px){
+    .control-card{ position: static; top: auto; }
+  }
+  label.field-label{ display:block; font-size:0.72rem; text-transform:uppercase; letter-spacing:0.08em; color: var(--ink-dim); margin-bottom:8px; }
+  input[type="date"]{
+    width:100%; padding: 10px 12px; border-radius:10px; border:1px solid var(--line);
+    background: var(--surface); color: var(--ink); font: inherit; font-family:'IBM Plex Mono',monospace;
+    font-size: 0.95rem;
+  }
+
+  /* ---------- Tabs ---------- */
+  .tab-bar{ display:flex; gap:6px; flex-wrap:wrap; margin-bottom:18px; }
+  .tab-btn{
+    border: 1px solid var(--line); background: transparent; color: var(--ink-dim);
+    padding: 8px 12px; border-radius: 10px; font-size: 0.76rem; cursor:pointer; text-align:left;
+    font-family: 'Work Sans', sans-serif; font-weight:600; transition: border-color .15s, color .15s, background .15s;
+    flex: 1 1 auto;
+  }
+  .tab-btn:hover{ border-color: var(--accent-strong); color: var(--accent-strong); }
+  .tab-btn.active{ border-color: var(--accent-strong); color: var(--accent-strong); background: color-mix(in srgb, var(--accent) 12%, transparent); }
+  .tab-panel{ display:none; }
+  .tab-panel.active{ display:block; }
+
+  .lc-fields{ display:flex; align-items:center; gap:4px; flex-wrap:wrap; }
+  .mini-input{
+    padding: 9px 8px; border-radius:9px; border:1px solid var(--line);
+    background: var(--surface); color: var(--ink); font: inherit; font-family:'IBM Plex Mono',monospace;
+    font-size: 0.88rem;
+  }
+  input.mini-input[type="number"]{ width: 58px; text-align:center; }
+  select.mini-input{ flex:1; min-width:0; font-family:'Work Sans',sans-serif; }
+  .lc-dot{ color:var(--ink-dim); font-weight:600; }
+  .subfield-row{ display:flex; gap:8px; margin-top:6px; }
+  .go-btn{
+    margin-top:14px; width:100%; padding:10px 14px; border-radius:10px; border:1px solid var(--accent-strong);
+    background: var(--accent-strong); color: var(--surface); font: inherit; font-weight:600; font-size:0.85rem;
+    cursor:pointer; font-family:'Work Sans',sans-serif;
+  }
+  .go-btn:hover{ opacity:0.9; }
+  .result-note{ margin-top:12px; font-size:0.82rem; color:var(--ink-dim); line-height:1.5; }
+  .result-note strong{ color:var(--ink); }
+  .result-note.err{ color: var(--cinnabar-strong); }
+  .occ-row{ display:flex; gap:8px; margin-top:10px; }
+  .occ-row .step-btn{ width:auto; padding:0 10px; font-size:0.75rem; flex:1; }
+  .quickset{ display:flex; flex-wrap:wrap; gap:8px; margin-top:14px; }
+  button.chip{
+    border: 1px solid var(--line); background: transparent; color: var(--ink);
+    padding: 7px 12px; border-radius: 999px; font-size: 0.8rem; cursor:pointer;
+    font-family: 'Work Sans', sans-serif; transition: border-color .15s, color .15s;
+  }
+  button.chip:hover{ border-color: var(--accent-strong); color: var(--accent-strong); }
+  button.chip:focus-visible, input:focus-visible, .step-btn:focus-visible{ outline: 2px solid var(--accent-strong); outline-offset: 2px; }
+
+  .stepper{ display:flex; align-items:center; gap:10px; margin-top:18px; }
+  .step-btn{
+    width:34px; height:34px; border-radius:9px; border:1px solid var(--line); background:var(--surface);
+    color:var(--ink); font-size:1rem; cursor:pointer; display:flex; align-items:center; justify-content:center;
+  }
+  .step-btn:hover{ border-color: var(--accent-strong); color: var(--accent-strong); }
+  .stepper span{ font-size:0.78rem; color:var(--ink-dim); }
+
+  .readout{ margin-top: 22px; display:flex; flex-direction:column; gap:12px; }
+  .readout .row{ display:flex; justify-content:space-between; gap:10px; align-items:baseline; }
+  .readout .row .k{ font-size:0.78rem; color:var(--ink-dim); }
+  .readout .row .v{ font-family:'IBM Plex Mono',monospace; font-size:0.95rem; font-weight:600; text-align:right; }
+
+  /* ---------- Wheels ---------- */
+  .wheels{
+    display:grid; grid-template-columns: 1fr 1fr; gap: 28px;
+  }
+  @media (max-width: 720px){ .wheels{ grid-template-columns: 1fr; } }
+  .wheel-card{
+    background: var(--surface-raised); border:1px solid var(--line); border-radius:18px;
+    padding: 22px; box-shadow: var(--shadow); text-align:center;
+  }
+  .wheel-card h3{ font-size:1.15rem; margin:0 0 4px; }
+  .wheel-card .cap{ color:var(--ink-dim); font-size:0.85rem; margin-bottom:14px; }
+  .wheel-svg-wrap{ position:relative; width:100%; max-width:320px; margin:0 auto; aspect-ratio: 1 / 1; }
+  .wheel-svg-wrap svg{ display:block; width:100%; height:100%; }
+  .wheel-center-label{
+    position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
+    text-align:center; pointer-events:none;
+  }
+  .wheel-center-label .name{ font-family:'Fraunces',serif; font-weight:600; font-size:1.2rem; }
+  .wheel-center-label .gloss{ font-size:0.72rem; color:var(--ink-dim); max-width:120px; }
+  .wheel-center-label .num{ font-family:'IBM Plex Mono',monospace; font-size:1.6rem; font-weight:600; color:var(--accent-strong); }
+  .pointer-tri{ fill: var(--cinnabar); }
+
+  .glyph-legend{ margin-top:16px; text-align:left; border-top:1px solid var(--line); padding-top:14px; }
+  .glyph-legend .legend-title{ font-size:0.68rem; text-transform:uppercase; letter-spacing:0.08em; color:var(--ink-dim); margin-bottom:8px; }
+  .glyph-legend ul{ list-style:none; margin:0; padding:0; display:grid; grid-template-columns:1fr 1fr; gap:3px 14px; max-height:260px; overflow-y:auto; }
+  .glyph-legend li{ display:flex; justify-content:space-between; gap:8px; font-size:0.76rem; padding:3px 6px; border-radius:6px; }
+  .glyph-legend li .mname{ font-weight:600; white-space:nowrap; }
+  .glyph-legend li .mgloss{ color:var(--ink-dim); text-align:right; }
+  .glyph-legend li.active{ background: color-mix(in srgb, var(--accent) 14%, transparent); }
+  .glyph-legend li.active .mgloss{ color:var(--ink); }
+
+  /* ---------- Debate cards ---------- */
+  .debate-grid{ display:grid; grid-template-columns: repeat(auto-fit,minmax(220px,1fr)); gap:16px; }
+  .debate-card{
+    background: var(--surface-raised); border:1px solid var(--line); border-radius:14px; padding:18px;
+    box-shadow: var(--shadow);
+  }
+  .debate-card h4{ margin:0 0 8px; font-family:'Fraunces',serif; font-size:1.02rem; }
+  .debate-card p{ margin:0; font-size:0.88rem; color:var(--ink-dim); }
+  .tag{ display:inline-block; font-size:0.66rem; text-transform:uppercase; letter-spacing:0.07em;
+        padding:3px 8px; border-radius:999px; margin-bottom:10px; font-weight:600; }
+  .tag.strong{ background: color-mix(in srgb, var(--jade) 18%, transparent); color: var(--jade-strong); }
+  .tag.weak{ background: color-mix(in srgb, var(--cinnabar) 16%, transparent); color: var(--cinnabar-strong); }
+  .tag.mixed{ background: color-mix(in srgb, var(--accent) 16%, transparent); color: var(--accent-strong); }
+
+  /* ---------- Drift chart ---------- */
+  .drift-layout{ display:grid; grid-template-columns: 1.3fr 1fr; gap: 32px; }
+  @media (max-width: 900px){ .drift-layout{ grid-template-columns: 1fr; } }
+  .chart-card{ background: var(--surface-raised); border:1px solid var(--line); border-radius:16px; padding:22px; box-shadow: var(--shadow); }
+  .legend{ display:flex; gap:18px; flex-wrap:wrap; margin-top:14px; font-size:0.82rem; }
+  .legend .dot{ width:10px; height:10px; border-radius:50%; display:inline-block; margin-right:6px; }
+  .stat-list{ display:flex; flex-direction:column; gap:16px; }
+  .stat{ background: var(--surface-raised); border:1px solid var(--line); border-radius:14px; padding:16px 18px; box-shadow: var(--shadow); }
+  .stat .big{ font-family:'IBM Plex Mono',monospace; font-size:1.5rem; font-weight:600; color:var(--accent-strong); }
+  .stat .lbl{ font-size:0.82rem; color:var(--ink-dim); margin-top:4px; }
+
+  /* ---------- Solution ---------- */
+  .solution-grid{ display:grid; grid-template-columns: 1fr 1fr; gap:22px; }
+  @media (max-width: 820px){ .solution-grid{ grid-template-columns:1fr; } }
+  .solution-card{
+    border-radius:18px; padding:24px; box-shadow: var(--shadow); border:1px solid var(--line);
+    background: var(--surface-raised);
+  }
+  .solution-card.featured{ border-color: var(--jade); }
+  .solution-card h3{ margin:0 0 10px; font-size:1.2rem; }
+  .solution-card ul{ padding-left: 1.1em; margin: 12px 0 0; }
+  .solution-card li{ margin-bottom:8px; font-size:0.92rem; color: var(--ink-dim); }
+  .badge{ font-size:0.68rem; text-transform:uppercase; letter-spacing:0.08em; font-weight:700; color: var(--jade-strong); }
+
+  .toggle-row{ display:flex; align-items:center; gap:12px; margin: 18px 0; }
+  .switch{ position:relative; width:46px; height:26px; }
+  .switch input{ opacity:0; width:0; height:0; }
+  .slider-toggle{ position:absolute; inset:0; background: var(--line); border-radius:999px; cursor:pointer; transition:.2s; }
+  .slider-toggle::before{ content:""; position:absolute; width:20px; height:20px; left:3px; top:3px; background:var(--surface-raised); border-radius:50%; transition:.2s; box-shadow: 0 1px 3px rgba(0,0,0,0.3);}
+  input:checked + .slider-toggle{ background: var(--jade); }
+  input:checked + .slider-toggle::before{ transform: translateX(20px); }
+
+  footer{ padding: 40px 0 60px; color: var(--ink-dim); font-size:0.85rem; }
+  footer a{ color: var(--ink-dim); text-decoration underline; }
+  .src-list{ padding-left:1.1em; }
+  .src-list li{ margin-bottom:6px; }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ transition:none !important; animation:none !important; }
+  }
+</style>
+
+<div class="wrap">
+  <header class="hero">
+    <div class="eyebrow">Calculadora del calendario maya</div>
+    <h1 class="title">Ah K'in — el guardián de los días</h1>
+    <p class="lede">Tzolk'in, Haab' y Cuenta Larga en una sola máquina: elige cualquier fecha y mira cómo giran las dos ruedas que los mayas hacían correr al mismo tiempo — y por qué, tarde o temprano, se desalinean con el Sol.</p>
+    <div class="today-strip" id="todayStrip"></div>
+  </header>
+
+  <section id="explorer-section">
+    <h2 class="section-title">Explorador de fechas</h2>
+    <p class="section-sub">Es un odómetro infinito, no un calendario agrícola: convierte en cualquier dirección. Dale una fecha gregoriana, una Cuenta Larga (la que aparece tallada en una estela), o un Tzolk'in/Haab' sueltos (correlación GMT, constante 584 283 — verificada contra el 21 de diciembre de 2012 = 13.0.0.0.0 4 Ajaw 3 K'ank'in).</p>
+    <div class="explorer">
+      <div class="control-card">
+        <div class="tab-bar" role="tablist">
+          <button class="tab-btn active" data-tab="greg" role="tab">Gregoriano → Maya</button>
+          <button class="tab-btn" data-tab="lc" role="tab">Cuenta Larga → Gregoriano</button>
+          <button class="tab-btn" data-tab="cr" role="tab">Tzolk'in / Haab' → Gregoriano</button>
+          <button class="tab-btn" data-tab="epoch" role="tab">Mi Cuenta Larga</button>
+        </div>
+
+        <div class="tab-panel active" id="panel-greg">
+          <label class="field-label" for="dateInput">Fecha gregoriana</label>
+          <input type="date" id="dateInput" />
+          <div class="stepper">
+            <button class="step-btn" id="stepBack" title="-1 día">−1</button>
+            <span>día</span>
+            <button class="step-btn" id="stepFwd" title="+1 día">+1</button>
+            <button class="step-btn" id="stepBack260" title="-260 días" style="margin-left:auto;">−260</button>
+            <button class="step-btn" id="stepFwd260" title="+260 días">+260</button>
+          </div>
+          <div class="quickset">
+            <button class="chip" data-date="today">Hoy</button>
+            <button class="chip" data-date="2012-12-21">21 dic 2012</button>
+            <button class="chip" data-date="1000-01-01">Año 1000</button>
+            <button class="chip" data-date="0800-06-01">Clásico Tardío (800)</button>
+          </div>
+        </div>
+
+        <div class="tab-panel" id="panel-lc">
+          <label class="field-label">Cuenta Larga (baktun.katun.tun.uinal.kin)</label>
+          <div class="lc-fields">
+            <input type="number" class="mini-input" id="lcBaktun" min="0" value="13" title="baktun">
+            <span class="lc-dot">.</span>
+            <input type="number" class="mini-input" id="lcKatun" min="0" max="19" value="0" title="katun">
+            <span class="lc-dot">.</span>
+            <input type="number" class="mini-input" id="lcTun" min="0" max="19" value="1" title="tun">
+            <span class="lc-dot">.</span>
+            <input type="number" class="mini-input" id="lcUinal" min="0" max="17" value="4" title="uinal">
+            <span class="lc-dot">.</span>
+            <input type="number" class="mini-input" id="lcKin" min="0" max="19" value="16" title="kin">
+          </div>
+          <button class="go-btn" id="lcConvert">Convertir</button>
+          <div class="result-note" id="lcResult">Como aparece en la estela: los cinco números separados por puntos, de izquierda (más grande, baktun ≈ 394 años) a derecha (kin, 1 día). Se muestran las dos fechas: la gregoriana (proléptica, usada hoy) y la juliana (la que llevaban los conquistadores españoles del siglo XVI — antes de la reforma de 1582).</div>
+        </div>
+
+        <div class="tab-panel" id="panel-cr">
+          <label class="field-label">Tzolk'in (opcional si das el Haab')</label>
+          <div class="subfield-row">
+            <input type="number" class="mini-input" id="crTzNum" min="1" max="13" placeholder="núm." title="número 1-13">
+            <select class="mini-input" id="crTzName" title="nombre del día"><option value="">— nombre —</option></select>
+          </div>
+          <label class="field-label" style="margin-top:16px;">Haab' (opcional si das el Tzolk'in)</label>
+          <div class="subfield-row">
+            <input type="number" class="mini-input" id="crHbDay" min="0" max="19" placeholder="día" title="día 0-19 (0-4 si es Wayeb')">
+            <select class="mini-input" id="crHbMonth" title="mes"><option value="">— mes —</option></select>
+          </div>
+          <label class="field-label" style="margin-top:16px;">Fecha aproximada, para desambiguar</label>
+          <input type="date" id="crAnchor">
+          <button class="go-btn" id="crSearch">Buscar la fecha más cercana</button>
+          <div class="result-note" id="crResult">El Tzolk'in se repite cada 260 días, el Haab' cada 365, y la pareja completa (Rueda Calendárica) cada 18 980 días ≈ 52 años — por eso hace falta un año aproximado para saber a cuál vuelta te refieres.</div>
+          <div class="occ-row" id="crOccRow" style="display:none;">
+            <button class="step-btn" id="crPrevOcc">← ocurrencia anterior</button>
+            <button class="step-btn" id="crNextOcc">ocurrencia siguiente →</button>
+          </div>
+        </div>
+
+        <div class="tab-panel" id="panel-epoch">
+          <label class="field-label" for="epochBirth">Tu 0.0.0.0.0 (cualquier fecha — nacimiento, boda, lo que quieras)</label>
+          <input type="date" id="epochBirth" />
+          <label class="field-label" style="margin-top:16px;" for="epochTarget">Fecha a convertir en tu propia Cuenta Larga</label>
+          <input type="date" id="epochTarget" />
+          <button class="go-btn" id="epochConvert">Reiniciar el odómetro aquí</button>
+          <div class="result-note" id="epochResult">El absurdo conquistador tiene razón en el fondo: el sistema no le pertenece a un único punto cero — es aritmética pura. Cualquier fecha puede ser "el día de la creación" si decides que ahí empieza a contar tu odómetro.</div>
+        </div>
+
+        <div class="readout" id="readout"></div>
+      </div>
+
+      <div class="wheels">
+        <div class="wheel-card">
+          <h3>Tzolk'in <span class="mono" style="color:var(--ink-dim); font-size:0.8rem;">· 260 días</span></h3>
+          <div class="cap">13 numerales × 20 nombres</div>
+          <div class="wheel-svg-wrap">
+            <svg id="tzolkinWheel" viewBox="0 0 320 320" width="100%" height="100%" preserveAspectRatio="xMidYMid meet"></svg>
+            <div class="wheel-center-label">
+              <div class="num" id="tzolkinNum">—</div>
+              <div class="name" id="tzolkinName">—</div>
+              <div class="gloss" id="tzolkinGloss">—</div>
+            </div>
+          </div>
+          <div class="glyph-legend">
+            <div class="legend-title">Los 20 nombres, con traducción</div>
+            <ul id="tzolkinLegend"></ul>
+          </div>
+        </div>
+        <div class="wheel-card">
+          <h3>Haab' <span class="mono" style="color:var(--ink-dim); font-size:0.8rem;">· 365 días</span></h3>
+          <div class="cap">18 veintenas + 5 días aciagos (Wayeb')</div>
+          <div class="wheel-svg-wrap">
+            <svg id="haabWheel" viewBox="0 0 320 320" width="100%" height="100%" preserveAspectRatio="xMidYMid meet"></svg>
+            <div class="wheel-center-label">
+              <div class="num" id="haabNum">—</div>
+              <div class="name" id="haabName">—</div>
+              <div class="gloss" id="haabGloss">—</div>
+            </div>
+          </div>
+          <div class="glyph-legend">
+            <div class="legend-title">Los 19 meses, con traducción</div>
+            <ul id="haabLegend"></ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="origin-section">
+    <h2 class="section-title">¿De dónde salió el 260?</h2>
+    <p class="section-sub">El Tzolk'in no es un calendario solar — ese trabajo lo hace el Haab'. La pregunta real es por qué 13 × 20 días. No hay consenso cerrado; así se reparte el peso de la evidencia hoy:</p>
+    <div class="debate-grid">
+      <div class="debate-card">
+        <span class="tag weak">Debilitada</span>
+        <h4>Paso cenital solar (Malmström, 1973)</h4>
+        <p>Cerca de los 14.8°N (Izapa) el Sol cruza el cenit dos veces al año separadas por ~260/105 días. Fue la teoría dominante décadas, pero Milbrath (2017) nota que Izapa no tiene fechas de Cuenta Larga que la respalden, y que sitios vecinos a esa misma latitud no muestran ese reparto exacto.</p>
+      </div>
+      <div class="debate-card">
+        <span class="tag strong">Con más respaldo</span>
+        <h4>Ciclo agrícola del maíz</h4>
+        <p>260 días como subdivisión práctica del año solar (260+105=365), marcada por E-Groups orientados a salidas del sol de febrero/octubre desde ~1000 a.C. Milbrath y Šprajc lo respaldan con arquitectura y con prácticas ch'orti' y k'iche' documentadas hoy.</p>
+      </div>
+      <div class="debate-card">
+        <span class="tag mixed">Evidencia nueva</span>
+        <h4>LIDAR de la costa del Golfo (2023)</h4>
+        <p>Šprajc, Inomata y Aveni hallaron cientos de complejos orientados a salidas de sol separadas por múltiplos de 13/20 días, algunos de 1100–750 a.C. — anterior en siglos al primer signo de día conocido en glifos (San Bartolo, ~300–200 a.C.). Aldana lo cuestiona como prueba sin verificación en terreno; Stuart lo respalda como evidencia indirecta sólida.</p>
+      </div>
+      <div class="debate-card">
+        <span class="tag mixed">Minoritaria pero viva</span>
+        <h4>Gestación humana</h4>
+        <p>260 días ≈ intervalo entre falta y parto. Tedlock documentó su uso ritual entre los k'iche' de hoy, pero Earle &amp; Snow (1985) matizaron que la correspondencia es más compleja de lo que parece.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="drift-section">
+    <h2 class="section-title">El problema: 365 ≠ 365.2422</h2>
+    <p class="section-sub">El Haab' cuenta siempre 365 días. Nunca supo del residuo de casi un cuarto de día del año trópico real — y ese residuo se acumula, año tras año, sin que ningún mecanismo lo detenga.</p>
+    <div class="drift-layout">
+      <div class="chart-card">
+        <canvas id="driftChart" width="640" height="360" style="width:100%; height:auto; display:block;"></canvas>
+        <div class="legend">
+          <span><span class="dot" style="background:var(--cinnabar);"></span>Haab' sin corrección (0.2422 d/año)</span>
+          <span><span class="dot" style="background:var(--accent);"></span>Wayeb' de 6 días cada 4 años (0.0078 d/año)</span>
+          <span><span class="dot" style="background:var(--jade);"></span>Gregoriano (0.0003 d/año)</span>
+        </div>
+        <div class="toggle-row">
+          <label class="switch">
+            <input type="checkbox" id="logToggle">
+            <span class="slider-toggle"></span>
+          </label>
+          <span style="font-size:0.85rem; color:var(--ink-dim);">Escala logarítmica (para ver las tres curvas a la vez)</span>
+        </div>
+      </div>
+      <div class="stat-list">
+        <div class="stat"><div class="big num">0.2422 d/año</div><div class="lbl">Lo que le sobra al año trópico sobre el Haab' de 365 días exactos</div></div>
+        <div class="stat"><div class="big num">1 día / 4.13 años</div><div class="lbl">Ritmo al que el 1 Pop se corre respecto a las estaciones reales</div></div>
+        <div class="stat"><div class="big num">~1 508 años</div><div class="lbl">Para que el Haab' recorra el año entero y vuelva a caer en la misma estación (= 29 Ruedas Calendáricas exactas)</div></div>
+        <div class="stat"><div class="big num">12.59 días</div><div class="lbl">Lo que se atrasa el Haab' respecto al Sol en cada Rueda Calendárica de 52 años (18 980 días reales vs. 18 992.6 días trópicos)</div></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="solution-section">
+    <h2 class="section-title">La solución para el tenderete del tianguis</h2>
+    <p class="section-sub">No hace falta ser astrónomo de la corte para no perder la cuenta de las estaciones. Dos soluciones, de la más simple (la real) a la más práctica de llevar en un puesto de mercado:</p>
+    <div class="solution-grid">
+      <div class="solution-card featured">
+        <span class="badge">La que de verdad usaban</span>
+        <h3>Mira al Sol, no cuentes días</h3>
+        <p>Clava una vara vertical (un gnomon) en tu puesto. Dos veces al año, alrededor del 12 de febrero y el 30 de octubre en Tikal, el Sol amanece exactamente sobre el mismo punto del horizonte que marcaste con una piedra el año pasado. Ese amanecer es tu reinicio de temporada — no depende de ninguna cuenta que se pueda desviar, porque la reajusta el propio Sol cada vez que la miras.</p>
+        <ul>
+          <li>El Tzolk'in sigue corriendo, sin parar nunca — sirve para nombrar los días y programar los rituales.</li>
+          <li>La siembra y la cosecha se anclan al horizonte, no al número de Haab' que llevas contado.</li>
+          <li>Es exactamente lo que muestran los E-Groups: arquitectura como calendario de observación, documentado desde ~1000 a.C.</li>
+        </ul>
+      </div>
+      <div class="solution-card">
+        <span class="badge" style="color:var(--accent-strong);">Alternativa aritmética</span>
+        <h3>Un Wayeb' de 6 días cada 4 años</h3>
+        <p>Si insistes en corregir el conteo con aritmética simple — sin fracciones, sin siglos, algo que un tendero pueda llevar con granos de maíz — la regla más sencilla es una versión maya del año bisiesto:</p>
+        <ul>
+          <li>Cuenta tus Haab' de 4 en 4 (los dedos de una mano, sin el pulgar).</li>
+          <li>Al cuarto año, cuando termines los 5 días de Wayeb', espera un día más antes de empezar 0 Pop.</li>
+          <li>Resultado: 365.25 días de media — un error de solo 0.0078 días/año frente al año trópico real: 1 día de desvío cada ~128 años, casi cuatro veces mejor que dejarlo sin corregir.</li>
+          <li>No es tan preciso como el gregoriano (26 s/año), pero es aritmética de un solo dedo extra, no de siglos y excepciones.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <p>Cálculos verificados contra la fecha de control 21 dic 2012 = 13.0.0.0.0 4 Ajaw 3 K'ank'in (correlación GMT 584 283). Año trópico: 365.2422 días (Meeus &amp; Savoie, 1992).</p>
+    <p><strong>Fuentes principales</strong></p>
+    <ul class="src-list">
+      <li>Šprajc, I., Inomata, T., Aveni, A.F. (2023). <em>Origins of Mesoamerican astronomy and calendar: Evidence from the Olmec and Maya regions.</em> Science Advances 9(1), eabq7675.</li>
+      <li>Milbrath, S. (2017). <em>The Role of Solar Observations in Developing the Preclassic Maya Calendar.</em> Latin American Antiquity 28.</li>
+      <li>Meeus, J., Savoie, D. (1992). <em>The History of the Tropical Year.</em> Journal of the British Astronomical Association 102.</li>
+    </ul>
+    <p>Documento completo con el debate ampliado, las referencias y todos los cálculos: ver la Memoria Maestra del proyecto.</p>
+  </footer>
+</div>
+
+<script>
+(function(){
+  // ---------- Core Maya calendar math (verified against 2012-12-21 = 13.0.0.0.0 4 Ajaw 3 K'ank'in) ----------
+  const GMT = 584283;
+  const TZOLKIN = [
+    ["Imix","Cocodrilo / Monstruo de la Tierra"],["Ik'","Viento"],["Ak'b'al","Noche / Oscuridad"],
+    ["K'an","Maíz / Amarillo"],["Chikchan","Serpiente"],["Kimi","Muerte"],["Manik'","Venado"],
+    ["Lamat","Estrella / Venus"],["Muluk","Agua / Ofrenda"],["Ok","Perro"],["Chuwen","Mono"],
+    ["Eb'","Diente / Escalera"],["B'en","Caña / Junco"],["Ix","Jaguar"],["Men","Águila"],
+    ["K'ib'","Cera / Buitre"],["Kab'an","Tierra / Terremoto"],["Etz'nab'","Pedernal"],
+    ["Kawak","Tormenta / Lluvia"],["Ajaw","Señor / Gobernante"]
+  ];
+  const HAAB = [
+    ["Pop","Estera / Petate"],["Wo'","Rana (trad.)"],["Sip","Rojo / conjunción"],["Sotz'","Murciélago"],
+    ["Sek","Recinto / cubrir"],["Xul","Perro / final"],["Yaxk'in","Sol nuevo"],["Mol","Agua / recolección"],
+    ["Ch'en","Pozo / Cueva"],["Yax","Verde / nuevo"],["Sak'","Blanco"],["Keh","Venado / rojo"],
+    ["Mak","Cerrado / cubrir"],["K'ank'in","Sol amarillo"],["Muwan","Búho / ave de mal agüero"],
+    ["Pax","Tiempo de siembra"],["K'ayab'","Tortuga"],["Kumk'u","Maíz maduro / granero"],
+    ["Wayeb'","Días sin nombre"]
+  ];
+
+  function jdn(y,m,d){
+    const a = Math.floor((14-m)/12);
+    const yy = y + 4800 - a;
+    const mm = m + 12*a - 3;
+    return d + Math.floor((153*mm+2)/5) + 365*yy + Math.floor(yy/4) - Math.floor(yy/100) + Math.floor(yy/400) - 32045;
+  }
+
+  function jdnToGregorian(J){
+    const a = J + 32044;
+    const b = Math.floor((4*a+3)/146097);
+    const c = a - Math.floor((146097*b)/4);
+    const d = Math.floor((4*c+3)/1461);
+    const e = c - Math.floor((1461*d)/4);
+    const m = Math.floor((5*e+2)/153);
+    const day = e - Math.floor((153*m+2)/5) + 1;
+    const month = m + 3 - 12*Math.floor(m/10);
+    const year = 100*b + d - 4800 + Math.floor(m/10);
+    return {y:year, m:month, d:day};
+  }
+
+  function jdnToJulian(J){
+    const c = J + 32082;
+    const d = Math.floor((4*c+3)/1461);
+    const e = c - Math.floor((1461*d)/4);
+    const m = Math.floor((5*e+2)/153);
+    const day = e - Math.floor((153*m+2)/5) + 1;
+    const month = m + 3 - 12*Math.floor(m/10);
+    const year = d - 4800 + Math.floor(m/10);
+    return {y:year, m:month, d:day};
+  }
+
+  function longCount(diff){
+    let baktun = Math.floor(diff/144000); let rem = ((diff%144000)+144000)%144000;
+    let katun = Math.floor(rem/7200); rem %= 7200;
+    let tun = Math.floor(rem/360); rem %= 360;
+    let uinal = Math.floor(rem/20); let kin = rem % 20;
+    return [baktun,katun,tun,uinal,kin];
+  }
+  function mod(n,m){ return ((n%m)+m)%m; }
+  function tzolkinOf(diff){
+    const nameIdx = mod(19+diff,20);
+    const number = mod(3+diff,13)+1;
+    return {number, name: TZOLKIN[nameIdx][0], gloss: TZOLKIN[nameIdx][1], idx:nameIdx};
+  }
+  function haabOf(diff){
+    const pos0 = 17*20+8;
+    const pos = mod(pos0+diff,365);
+    let month, day;
+    if(pos<340){ month = Math.floor(pos/20); day = pos%20; }
+    else { month = 18; day = pos-340; }
+    return {day, month: HAAB[month][0], gloss: HAAB[month][1], idx:month, pos};
+  }
+  function yearBearerFor(diff){
+    const pos0 = 17*20+8;
+    const pos = mod(pos0+diff,365);
+    const diffPop0 = diff - pos;
+    return {tz: tzolkinOf(diffPop0), diffPop0};
+  }
+
+  function fmtDate(y,m,d){
+    const months = ["ene","feb","mar","abr","may","jun","jul","ago","sep","oct","nov","dic"];
+    return `${d} ${months[m-1]} ${y<0? (-y+1)+" a.C.": y}`;
+  }
+
+  // ---------- Wheel drawing ----------
+  function clearSvg(svgEl){
+    while(svgEl.firstChild){ svgEl.removeChild(svgEl.firstChild); }
+  }
+  function drawWheel(svgEl, items, highlightIdx, colorActive){
+    const colorInactive = getVar('--wheel-ring');
+    const strokeColor = getVar('--surface-raised');
+    const dimTextColor = getVar('--ink-dim');
+    clearSvg(svgEl);
+    const ns = "http://www.w3.org/2000/svg";
+    const cx=160, cy=160, rOuter=150, rInner=96;
+    const n = items.length;
+    const rotOffset = -Math.PI/2; // start at top
+    for(let i=0;i<n;i++){
+      const a0 = rotOffset + (i/n)*2*Math.PI;
+      const a1 = rotOffset + ((i+1)/n)*2*Math.PI;
+      const large = (a1-a0) > Math.PI ? 1 : 0;
+      const x0o = cx + rOuter*Math.cos(a0), y0o = cy + rOuter*Math.sin(a0);
+      const x1o = cx + rOuter*Math.cos(a1), y1o = cy + rOuter*Math.sin(a1);
+      const x0i = cx + rInner*Math.cos(a1), y0i = cy + rInner*Math.sin(a1);
+      const x1i = cx + rInner*Math.cos(a0), y1i = cy + rInner*Math.sin(a0);
+      const path = document.createElementNS(ns,"path");
+      const d = `M ${x0o} ${y0o} A ${rOuter} ${rOuter} 0 ${large} 1 ${x1o} ${y1o} L ${x0i} ${y0i} A ${rInner} ${rInner} 0 ${large} 0 ${x1i} ${y1i} Z`;
+      path.setAttribute("d", d);
+      const active = i===highlightIdx;
+      path.setAttribute("fill", active ? colorActive : colorInactive);
+      path.setAttribute("stroke", strokeColor);
+      path.setAttribute("stroke-width","1.5");
+      path.style.transition = "fill .25s";
+      svgEl.appendChild(path);
+
+      const amid = (a0+a1)/2;
+      const rt = (rOuter+rInner)/2;
+      const tx = cx + rt*Math.cos(amid), ty = cy + rt*Math.sin(amid);
+      const text = document.createElementNS(ns,"text");
+      text.setAttribute("x", tx); text.setAttribute("y", ty);
+      text.setAttribute("text-anchor","middle");
+      text.setAttribute("dominant-baseline","middle");
+      text.setAttribute("font-size", n>19 ? "8.6" : "9.5");
+      text.setAttribute("font-family","'Work Sans', sans-serif");
+      text.setAttribute("fill", active ? "#fff" : dimTextColor);
+      text.setAttribute("font-weight", active ? "700":"500");
+      text.textContent = items[i];
+      svgEl.appendChild(text);
+    }
+    // pointer
+    const tri = document.createElementNS(ns,"path");
+    tri.setAttribute("d", `M ${cx-8} ${cy-rOuter-2} L ${cx+8} ${cy-rOuter-2} L ${cx} ${cy-rOuter+14} Z`);
+    tri.setAttribute("class","pointer-tri");
+    svgEl.appendChild(tri);
+  }
+
+  // ---------- UI wiring ----------
+  const dateInput = document.getElementById('dateInput');
+  const todayStrip = document.getElementById('todayStrip');
+  const readout = document.getElementById('readout');
+
+  function pad(n){ return String(n).padStart(2,'0'); }
+
+  function render(y,m,d){
+   try {
+    const J = jdn(y,m,d);
+    const diff = J - GMT;
+    const lc = longCount(diff);
+    const tz = tzolkinOf(diff);
+    const hb = haabOf(diff);
+    const yb = yearBearerFor(diff);
+    const crPos = mod(yb.diffPop0, 18980);
+    const crYear = Math.floor(crPos/365)+1;
+
+    // wheel highlight
+    drawWheel(document.getElementById('tzolkinWheel'), TZOLKIN.map(t=>t[0]), tz.idx, getVar('--accent'));
+    drawWheel(document.getElementById('haabWheel'), HAAB.map(h=>h[0]), hb.idx, getVar('--jade'));
+
+    document.getElementById('tzolkinNum').textContent = tz.number;
+    document.getElementById('tzolkinName').textContent = tz.name;
+    document.getElementById('tzolkinGloss').textContent = tz.gloss;
+    document.getElementById('haabNum').textContent = hb.day;
+    document.getElementById('haabName').textContent = hb.month;
+    document.getElementById('haabGloss').textContent = hb.gloss;
+
+    const julDate = jdnToJulian(J);
+    readout.innerHTML = `
+      <div class="row"><span class="k">Cuenta Larga</span><span class="v">${lc.join('.')}</span></div>
+      <div class="row"><span class="k">Fecha juliana</span><span class="v" style="font-weight:400;">${fmtDate(julDate.y,julDate.m,julDate.d)}</span></div>
+      <div class="row"><span class="k">Tzolk'in</span><span class="v">${tz.number} ${tz.name} <span style="font-weight:400;color:var(--ink-dim);">— ${tz.gloss}</span></span></div>
+      <div class="row"><span class="k">Haab'</span><span class="v">${hb.day} ${hb.month} <span style="font-weight:400;color:var(--ink-dim);">— ${hb.gloss}</span></span></div>
+      <div class="row"><span class="k">Year Bearer</span><span class="v">${yb.tz.number} ${yb.tz.name} <span style="font-weight:400;color:var(--ink-dim);">— ${yb.tz.gloss}</span></span></div>
+      <div class="row"><span class="k">Rueda Calendárica</span><span class="v">año ${crYear} / 52</span></div>
+    `;
+
+    todayStrip.innerHTML = `
+      <div class="item"><span class="k">Fecha</span><span class="v">${fmtDate(y,m,d)}</span></div>
+      <div class="item"><span class="k">Cuenta Larga</span><span class="v mono accent">${lc.join('.')}</span></div>
+      <div class="item"><span class="k">Tzolk'in</span><span class="v accent">${tz.number} ${tz.name} — ${tz.gloss}</span></div>
+      <div class="item"><span class="k">Haab'</span><span class="v accent">${hb.day} ${hb.month} — ${hb.gloss}</span></div>
+    `;
+
+    renderLegend('tzolkinLegend', TZOLKIN, tz.idx);
+    renderLegend('haabLegend', HAAB, hb.idx);
+   } catch(err){
+     readout.innerHTML = `<div style="color:var(--cinnabar); font-size:0.82rem; line-height:1.5;"><strong>Se rompió algo dibujando el calendario:</strong><br>${(err && err.message) || err}<br><span style="opacity:.7;">${(err && err.stack || '').toString().split('\\n').slice(0,3).join('<br>')}</span></div>`;
+     if (window.console && console.error) console.error('Ah Kin render error:', err);
+   }
+    return {y,m,d};
+  }
+
+  function renderLegend(elId, data, activeIdx){
+    const el = document.getElementById(elId);
+    el.innerHTML = data.map((item,i)=>
+      `<li class="${i===activeIdx?'active':''}"><span class="mname">${item[0]}</span><span class="mgloss">${item[1]}</span></li>`
+    ).join('');
+  }
+
+  function getVar(name){
+    return getComputedStyle(document.body).getPropertyValue(name).trim() || '#1c8f96';
+  }
+
+  function todayLocalISO(){
+    const now = new Date();
+    return now.getFullYear()+"-"+pad(now.getMonth()+1)+"-"+pad(now.getDate());
+  }
+  function setFromISO(str){
+    dateInput.value = str;
+    const dt = new Date(str+"T00:00:00Z");
+    render(dt.getUTCFullYear(), dt.getUTCMonth()+1, dt.getUTCDate());
+  }
+  function shiftDays(n){
+    const dt = new Date(dateInput.value+"T00:00:00Z");
+    dt.setUTCDate(dt.getUTCDate()+n);
+    setFromISO(dt.toISOString().slice(0,10));
+  }
+
+  function setDateAndRender(y,m,d){
+    if(y>=1 && y<=9999){
+      dateInput.value = `${String(y).padStart(4,'0')}-${pad(m)}-${pad(d)}`;
+    }
+    render(y,m,d);
+  }
+
+  // ---------- Tabs ----------
+  document.querySelectorAll('.tab-btn').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+      document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById('panel-'+btn.dataset.tab).classList.add('active');
+    });
+  });
+
+  // ---------- Populate Tzolk'in / Haab' selects ----------
+  const crTzName = document.getElementById('crTzName');
+  const crHbMonth = document.getElementById('crHbMonth');
+  TZOLKIN.forEach((t,i)=>{
+    const opt = document.createElement('option');
+    opt.value = i; opt.textContent = `${t[0]} — ${t[1]}`;
+    crTzName.appendChild(opt);
+  });
+  HAAB.forEach((h,i)=>{
+    const opt = document.createElement('option');
+    opt.value = i; opt.textContent = i===18 ? `${h[0]} — ${h[1]} (5 días)` : `${h[0]} — ${h[1]}`;
+    crHbMonth.appendChild(opt);
+  });
+  document.getElementById('crAnchor').value = todayLocalISO();
+  document.getElementById('epochTarget').value = todayLocalISO();
+
+  // ---------- Tab: Mi Cuenta Larga (odómetro con epoch personalizado) ----------
+  document.getElementById('epochConvert').addEventListener('click', ()=>{
+    const epochResult = document.getElementById('epochResult');
+    const birthStr = document.getElementById('epochBirth').value;
+    const targetStr = document.getElementById('epochTarget').value || todayLocalISO();
+    if(!birthStr){
+      epochResult.className = 'result-note err';
+      epochResult.innerHTML = `Primero dale una fecha de nacimiento (o el evento que quieras) para que sea tu 0.0.0.0.0.`;
+      return;
+    }
+    const bDt = new Date(birthStr+"T00:00:00Z");
+    const tDt = new Date(targetStr+"T00:00:00Z");
+    const birthJdn = jdn(bDt.getUTCFullYear(), bDt.getUTCMonth()+1, bDt.getUTCDate());
+    const targetJdn = jdn(tDt.getUTCFullYear(), tDt.getUTCMonth()+1, tDt.getUTCDate());
+    const diff = targetJdn - birthJdn;
+    epochResult.className = 'result-note';
+    if(diff < 0){
+      const lc = longCount(-diff);
+      epochResult.innerHTML = `Esa fecha es <strong>anterior</strong> a tu epoch — en tu propio sistema sería "−${lc.join('.')}" (antes de tu creación del mundo, valga la broma).`;
+      return;
+    }
+    const lc = longCount(diff);
+    const years = (diff/365.2422).toFixed(2);
+    epochResult.innerHTML = `${fmtDate(tDt.getUTCFullYear(), tDt.getUTCMonth()+1, tDt.getUTCDate())} en <strong>tu</strong> Cuenta Larga (0.0.0.0.0 = ${fmtDate(bDt.getUTCFullYear(), bDt.getUTCMonth()+1, bDt.getUTCDate())}) es: <strong>${lc.join('.')}</strong><br>Eso son ${diff.toLocaleString('es')} días — unos ${years} años trópicos vividos. Nota: el Tzolk'in y el Haab' de arriba no se mueven con este botón; siguen siendo los reales, porque esos sí son de todos, no solo tuyos.`;
+  });
+
+  // ---------- Tab: Cuenta Larga → Gregoriano ----------
+  document.getElementById('lcConvert').addEventListener('click', ()=>{
+    const lcResult = document.getElementById('lcResult');
+    const b = parseInt(document.getElementById('lcBaktun').value,10) || 0;
+    const k = parseInt(document.getElementById('lcKatun').value,10) || 0;
+    const t = parseInt(document.getElementById('lcTun').value,10) || 0;
+    const u = parseInt(document.getElementById('lcUinal').value,10) || 0;
+    const kn = parseInt(document.getElementById('lcKin').value,10) || 0;
+    if(k>19||t>19||u>17||kn>19||k<0||t<0||u<0||kn<0){
+      lcResult.className = 'result-note err';
+      lcResult.innerHTML = `Revisa los rangos: katun y tun van de 0 a 19, uinal de 0 a 17, kin de 0 a 19.`;
+      return;
+    }
+    const diff = b*144000 + k*7200 + t*360 + u*20 + kn;
+    const J = diff + GMT;
+    const g = jdnToGregorian(J);
+    const j = jdnToJulian(J);
+    setDateAndRender(g.y, g.m, g.d);
+    lcResult.className = 'result-note';
+    lcResult.innerHTML = `<strong>${b}.${k}.${t}.${u}.${kn}</strong><br>Gregoriano (proléptico): <strong>${fmtDate(g.y,g.m,g.d)}</strong><br>Juliano (el de los conquistadores): <strong>${fmtDate(j.y,j.m,j.d)}</strong>. Ruedas actualizadas abajo.`;
+  });
+
+  // ---------- Tab: Tzolk'in / Haab' → Gregoriano ----------
+  let lastCR = null; // {diff0, cycle}
+  function runCRSearch(anchorDiff){
+    const resultEl = document.getElementById('crResult');
+    const occRow = document.getElementById('crOccRow');
+    const tzNumStr = document.getElementById('crTzNum').value;
+    const tzNameStr = crTzName.value;
+    const hbDayStr = document.getElementById('crHbDay').value;
+    const hbMonthStr = crHbMonth.value;
+
+    let targetTz = null, targetHaab = null;
+    if(tzNumStr!=='' && tzNameStr!==''){
+      const num = parseInt(tzNumStr,10);
+      if(num<1||num>13){
+        resultEl.className='result-note err'; occRow.style.display='none';
+        resultEl.innerHTML = `El número del Tzolk'in va de 1 a 13.`; return;
+      }
+      targetTz = {number:num, nameIdx: parseInt(tzNameStr,10)};
+    }
+    if(hbDayStr!=='' && hbMonthStr!==''){
+      targetHaab = {day: parseInt(hbDayStr,10), monthIdx: parseInt(hbMonthStr,10)};
+      const maxDay = targetHaab.monthIdx===18 ? 4 : 19;
+      if(targetHaab.day<0 || targetHaab.day>maxDay){
+        resultEl.className='result-note err'; occRow.style.display='none';
+        resultEl.innerHTML = `${HAAB[targetHaab.monthIdx][0]} solo tiene días ${targetHaab.monthIdx===18?'0 a 4':'0 a 19'}.`; return;
+      }
+    }
+    if(!targetTz && !targetHaab){
+      resultEl.className='result-note err'; occRow.style.display='none';
+      resultEl.innerHTML = `Ingresa al menos un Tzolk'in completo (número + nombre) o un Haab' completo (día + mes).`;
+      return;
+    }
+    const cycle = (targetTz && targetHaab) ? 18980 : (targetTz ? 260 : 365);
+    let diff0 = null;
+    for(let d=0; d<cycle; d++){
+      let ok = true;
+      if(targetTz){ const t = tzolkinOf(d); if(t.number!==targetTz.number || t.idx!==targetTz.nameIdx) ok=false; }
+      if(ok && targetHaab){ const h = haabOf(d); if(h.day!==targetHaab.day || h.idx!==targetHaab.monthIdx) ok=false; }
+      if(ok){ diff0 = d; break; }
+    }
+    if(diff0===null){
+      resultEl.className='result-note err'; occRow.style.display='none';
+      resultEl.innerHTML = `Esa combinación de Tzolk'in y Haab' no existe: solo 1 de cada 5 parejas posibles ocurre de verdad en la Rueda Calendárica.`;
+      return;
+    }
+    const kmul = Math.round((anchorDiff-diff0)/cycle);
+    const nearestDiff = diff0 + kmul*cycle;
+    const J = nearestDiff + GMT;
+    const g = jdnToGregorian(J);
+    const j = jdnToJulian(J);
+    setDateAndRender(g.y, g.m, g.d);
+    lastCR = {diff0, cycle};
+    const cycleLabel = cycle===18980 ? '18 980 días (≈52 años, Rueda Calendárica completa)' : cycle===260 ? '260 días (un Tzolk\'in)' : '365 días (un Haab\')';
+    resultEl.className = 'result-note';
+    resultEl.innerHTML = `<strong>${fmtDate(g.y,g.m,g.d)}</strong> (gregoriano) / <strong>${fmtDate(j.y,j.m,j.d)}</strong> (juliano) es la ocurrencia más cercana a tu fecha aproximada. Esta combinación exacta se repite cada ${cycleLabel} — pudo ser esta vuelta, o la anterior/siguiente.`;
+    occRow.style.display = 'flex';
+  }
+  document.getElementById('crSearch').addEventListener('click', ()=>{
+    const anchorStr = document.getElementById('crAnchor').value || todayLocalISO();
+    const dt = new Date(anchorStr+"T00:00:00Z");
+    const anchorDiff = jdn(dt.getUTCFullYear(), dt.getUTCMonth()+1, dt.getUTCDate()) - GMT;
+    runCRSearch(anchorDiff);
+  });
+  document.getElementById('crPrevOcc').addEventListener('click', ()=>{
+    if(!lastCR) return;
+    const curDiff = jdn(...dateInput.value.split('-').map(Number)) - GMT;
+    runCRSearch(curDiff - lastCR.cycle);
+  });
+  document.getElementById('crNextOcc').addEventListener('click', ()=>{
+    if(!lastCR) return;
+    const curDiff = jdn(...dateInput.value.split('-').map(Number)) - GMT;
+    runCRSearch(curDiff + lastCR.cycle);
+  });
+
+  dateInput.addEventListener('change', ()=> setFromISO(dateInput.value) );
+  document.getElementById('stepBack').addEventListener('click', ()=>shiftDays(-1));
+  document.getElementById('stepFwd').addEventListener('click', ()=>shiftDays(1));
+  document.getElementById('stepBack260').addEventListener('click', ()=>shiftDays(-260));
+  document.getElementById('stepFwd260').addEventListener('click', ()=>shiftDays(260));
+
+  document.querySelectorAll('.chip').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      setFromISO(btn.dataset.date === 'today' ? todayLocalISO() : btn.dataset.date);
+    });
+  });
+
+  // init
+  setFromISO(todayLocalISO());
+
+  // ---------- Drift chart ----------
+  const canvas = document.getElementById('driftChart');
+  const ctx = canvas.getContext('2d');
+  const logToggle = document.getElementById('logToggle');
+
+  function drawChart(){
+    const W = canvas.width, H = canvas.height;
+    ctx.clearRect(0,0,W,H);
+    const padL=54, padR=20, padT=20, padB=40;
+    const plotW = W-padL-padR, plotH = H-padT-padB;
+    const maxYears = 1600;
+    const rates = [
+      {key:'haab', rate:0.2422, color: getVar('--cinnabar')},
+      {key:'julmaya', rate:0.0078, color: getVar('--accent')},
+      {key:'greg', rate:0.0003, color: getVar('--jade')}
+    ];
+    const useLog = logToggle.checked;
+    const maxDriftLinear = 1600*0.2422;
+    function yFor(val){
+      if(useLog){
+        const v = Math.max(val,0.05);
+        const lo = Math.log10(0.05), hi = Math.log10(maxDriftLinear);
+        return padT + plotH*(1-(Math.log10(v)-lo)/(hi-lo));
+      } else {
+        return padT + plotH*(1-val/maxDriftLinear);
+      }
+    }
+    // axes
+    ctx.strokeStyle = getVar('--line'); ctx.lineWidth=1;
+    ctx.beginPath(); ctx.moveTo(padL,padT); ctx.lineTo(padL,H-padB); ctx.lineTo(W-padR,H-padB); ctx.stroke();
+    ctx.fillStyle = getVar('--ink-dim'); ctx.font = "11px 'IBM Plex Mono', monospace";
+    for(let yr=0; yr<=maxYears; yr+=400){
+      const x = padL + plotW*(yr/maxYears);
+      ctx.beginPath(); ctx.moveTo(x,H-padB); ctx.lineTo(x,H-padB+4); ctx.strokeStyle=getVar('--line'); ctx.stroke();
+      ctx.fillText(yr+"a", x-10, H-padB+18);
+    }
+    ctx.save();
+    ctx.translate(14, H/2); ctx.rotate(-Math.PI/2);
+    ctx.textAlign="center"; ctx.fillText("días de desvío", 0, 0);
+    ctx.restore();
+
+    rates.forEach(r=>{
+      ctx.beginPath();
+      for(let yr=0; yr<=maxYears; yr+=4){
+        const drift = r.rate*yr;
+        const x = padL + plotW*(yr/maxYears);
+        const y = yFor(drift);
+        if(yr===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+      }
+      ctx.strokeStyle = r.color; ctx.lineWidth=2.5; ctx.stroke();
+    });
+
+    // 365-day reference line (full season wander) only meaningful linear
+    if(!useLog){
+      const y365 = yFor(365);
+      ctx.strokeStyle = getVar('--ink-dim'); ctx.setLineDash([4,4]); ctx.lineWidth=1;
+      ctx.beginPath(); ctx.moveTo(padL,y365); ctx.lineTo(W-padR,y365); ctx.stroke();
+      ctx.setLineDash([]);
+      ctx.fillStyle = getVar('--ink-dim'); ctx.font="10px 'Work Sans', sans-serif";
+      ctx.fillText("365 días = una vuelta completa a las estaciones", padL+6, y365-6);
+    }
+  }
+  logToggle.addEventListener('change', drawChart);
+  window.addEventListener('resize', drawChart);
+  drawChart();
+  setTimeout(drawChart, 50);
+})();
+</script>
+
+</body>
+</html>
